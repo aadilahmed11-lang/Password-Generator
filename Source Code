@@ -1,0 +1,60 @@
+import random
+import string
+
+
+def generate_password(length, use_digits, use_special):
+    characters = string.ascii_letters
+
+    if use_digits:
+        characters += string.digits
+    if use_special:
+        characters += string.punctuation
+
+    if not characters:
+        return None
+
+    password = ""
+    for _ in range(length):
+        password += random.choice(characters)
+
+    return password
+
+
+def save_to_file(password):
+    with open("passwords.txt", "a") as file:
+        file.write(password + "\n")
+    print("Password saved to passwords.txt")
+
+
+def main():
+    print("=== Password Generator Tool ===")
+
+    try:
+        length = int(input("Enter password length: "))
+        if length <= 0:
+            print("Length must be greater than 0.")
+            return
+    except ValueError:
+        print("Invalid length!")
+        return
+
+    digits_choice = input("Include digits? (y/n): ").lower() == "y"
+    special_choice = input("Include special characters? (y/n): ").lower() == "y"
+
+    password = generate_password(length, digits_choice, special_choice)
+
+    if password is None:
+        print("Error generating password.")
+        return
+
+    print("\nGenerated Password:", password)
+
+    save_choice = input("Save password to file? (y/n): ").lower()
+    if save_choice == "y":
+        save_to_file(password)
+
+    print("\nDone!")
+
+
+if __name__ == "__main__":
+    main()
